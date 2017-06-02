@@ -41,6 +41,7 @@ class Login < ActiveRecord::Base
 
   before_validation :ensure_oauth2_token
   before_validation :assign_single_use_oauth2_token
+  after_create :create_user
 
   # Refreshes the random token. This will effectively log out all clients that
   # possess the previous token.
@@ -87,6 +88,10 @@ class Login < ActiveRecord::Base
 
     def generate_token
       SecureRandom.hex(125)
+    end
+
+    def create_user
+      User.create(email: identification, displayname: 'New ATLMaps User', login: self)
     end
 
 end
