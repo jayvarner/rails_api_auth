@@ -41,6 +41,7 @@ class Login < ActiveRecord::Base
 
   before_validation :ensure_oauth2_token
   before_validation :assign_single_use_oauth2_token
+  after_validation :assign_confirm_token
   after_create :create_user
 
   # Refreshes the random token. This will effectively log out all clients that
@@ -92,6 +93,12 @@ class Login < ActiveRecord::Base
 
     def create_user
       User.create(email: identification, displayname: 'New ATLMaps User', login: self)
+    end
+
+    def assign_confirm_token
+      if login.password_digest? && !email_confirmed
+        self.confirm_token = SecureRandom.urlsafe_base64.to_s
+      end
     end
 
 end
