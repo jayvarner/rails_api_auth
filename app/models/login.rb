@@ -91,12 +91,13 @@ class Login < ActiveRecord::Base
       SecureRandom.hex(125)
     end
 
+    # FIXME: this should not be set here.
     def create_user
-      User.create(email: identification, displayname: 'New ATLMaps User', login: self)
+      User.create(email: identification, displayname: 'Click to set name.', login: self)
     end
 
     def assign_confirm_token
-      if login.password_digest? && !email_confirmed
+      if password_digest? && !email_confirmed
         self.confirm_token = SecureRandom.urlsafe_base64.to_s
       end
     end
