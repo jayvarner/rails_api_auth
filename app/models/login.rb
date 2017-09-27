@@ -97,7 +97,7 @@ class Login < ActiveRecord::Base
     end
 
     def assign_confirm_token
-      if login.password_digest? && !email_confirmed
+      if password_digest? && !email_confirmed
         self.confirm_token = SecureRandom.urlsafe_base64.to_s
       end
     end
