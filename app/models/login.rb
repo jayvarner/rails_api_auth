@@ -92,6 +92,7 @@ class Login < ActiveRecord::Base
     end
 
     def create_user
+      return unless user.nil?
       User.create(email: identification, displayname: 'New ATLMaps User', login: self)
     end
 
